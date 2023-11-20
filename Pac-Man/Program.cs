@@ -10,25 +10,21 @@ Random generator = new Random();
 Raylib.InitWindow(800, 600, "Pac-Man");
 Raylib.SetTargetFPS(60);
 
-int [,] snow = new int[10, 10];
+Vector2 movement = new Vector2(0, 0);
 
-snow[0, 0] = 8;
-snow[5, 0] = 8;
-snow[5, 1] = 8;
-snow[5, 2] = 8;
+Rectangle characterRect = new Rectangle(200,300, 32, 32);
 
-int space = 2;
+Vector2 midPoint = new Vector2(16, 300);
+// Texture2D characterIMG = Raylib.LoadTexture("pic.png");
 
+List<Rectangle> walls = new();
+walls.Add(new Rectangle(0, 0, 800, 32));
+walls.Add(new Rectangle(0, 32, 32, 252));
+walls.Add(new Rectangle(0, 316, 32, 252));
+walls.Add(new Rectangle(0, 568, 800, 32));
+walls.Add(new Rectangle(768, 32, 32, 252));
+walls.Add(new Rectangle(768, 316, 32, 252));
 
-for (int y = 0; y < snow.GetLength(1); y++)
-{
-    for (int x = 0; x < snow.GetLength(0); x++)
-    {
-        Console.SetCursorPosition(x * space, y * space);
-        
-        Console.Write(snow[x, y]);
-    }
-}
 
 float speed = 5;
 int coins = 0;
@@ -63,12 +59,20 @@ while (!Raylib.WindowShouldClose())
     Raylib.BeginDrawing();
     if (scene == "start")
     {
-        Raylib.ClearBackground(Color.BLACK);    
+        Raylib.ClearBackground(Color.BLACK);
+        Raylib.DrawText("press space to start", 275, 300, 32, Color.WHITE);
 
     }
     else if (scene == "room1")
     {
         Raylib.ClearBackground(Color.BLACK);
+        
+        Raylib.DrawCircleV(midPoint, 16, Color.YELLOW);
+
+        foreach (Rectangle wall in walls)
+        {
+            Raylib.DrawRectangleRec(wall, Color.DARKBLUE);
+        }
     }
     else if (scene == "gameOver")
     {
