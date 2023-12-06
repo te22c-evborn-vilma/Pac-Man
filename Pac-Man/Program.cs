@@ -16,6 +16,16 @@ Rectangle charRect = new Rectangle(10, 292, 24, 24);
 Rectangle gate = new Rectangle(352, 224, 128, 5);
 Rectangle door = new Rectangle(768, 288, 32, 32);
 
+List<Rectangle> enemies = new();
+enemies.Add(new Rectangle());
+enemies.Add(new Rectangle());
+enemies.Add(new Rectangle());
+
+List<Rectangle> coins = new(); //spawna nånstans
+coins.Add(new Rectangle());
+coins.Add(new Rectangle());
+coins.Add(new Rectangle());
+
 // Vector2 midPoint = new Vector2(20, 320);
 // Texture2D characterIMG = Raylib.LoadTexture("pic.png");
 
@@ -85,7 +95,7 @@ walls.Add(new Rectangle(512, 512, 32, 96));
 
 
 float speed = 2;
-int coins = 0;
+int points = 0;
 string scene = "start";
 
 while (!Raylib.WindowShouldClose())
