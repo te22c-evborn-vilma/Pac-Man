@@ -7,26 +7,84 @@ Console.OutputEncoding = System.Text.Encoding.UTF8;
 
 Random generator = new Random();
 
-Raylib.InitWindow(800, 600, "Pac-Man");
+Raylib.InitWindow(800, 640, "Pac-Man");
 Raylib.SetTargetFPS(60);
 
 Vector2 movement = new Vector2(0, 0);
 
-Rectangle characterRect = new Rectangle(200,300, 32, 32);
+Rectangle charRect = new Rectangle(10, 292, 24, 24);
+Rectangle gate = new Rectangle(352, 224, 128, 5);
+Rectangle door = new Rectangle(768, 288, 32, 32);
 
-Vector2 midPoint = new Vector2(16, 300);
+// Vector2 midPoint = new Vector2(20, 320);
 // Texture2D characterIMG = Raylib.LoadTexture("pic.png");
 
 List<Rectangle> walls = new();
+// horisontell
 walls.Add(new Rectangle(0, 0, 800, 32));
-walls.Add(new Rectangle(0, 32, 32, 252));
-walls.Add(new Rectangle(0, 316, 32, 252));
-walls.Add(new Rectangle(0, 568, 800, 32));
-walls.Add(new Rectangle(768, 32, 32, 252));
-walls.Add(new Rectangle(768, 316, 32, 252));
+walls.Add(new Rectangle(0, 608, 800, 32));
+walls.Add(new Rectangle(32, 256, 160, 32));
+walls.Add(new Rectangle(32, 320, 160, 32));
+walls.Add(new Rectangle(608, 256, 160, 32));
+walls.Add(new Rectangle(608, 320, 160, 32));
+walls.Add(new Rectangle(64, 64, 64, 32));
+walls.Add(new Rectangle(160, 64, 64, 64));
+walls.Add(new Rectangle(320, 64, 160, 32));
+walls.Add(new Rectangle(576, 64, 64, 64));
+walls.Add(new Rectangle(672, 64, 64, 32));
+walls.Add(new Rectangle(64, 128, 64, 32));
+walls.Add(new Rectangle(672, 128, 64, 32));
+walls.Add(new Rectangle(288, 160, 64, 32));
+walls.Add(new Rectangle(448, 160, 64, 32));
+walls.Add(new Rectangle(128, 192, 64, 32));
+walls.Add(new Rectangle(608, 192, 64, 32));
+walls.Add(new Rectangle(288, 224, 64, 32));
+walls.Add(new Rectangle(448, 224, 64, 32));
+walls.Add(new Rectangle(288, 352, 224, 32));
+walls.Add(new Rectangle(128, 384, 96, 32));
+walls.Add(new Rectangle(576, 384, 96, 32));
+walls.Add(new Rectangle(128, 480, 96, 32));
+walls.Add(new Rectangle(576, 480, 96, 32));
+walls.Add(new Rectangle(64, 544, 160, 32));
+walls.Add(new Rectangle(320, 544, 160, 32));
+walls.Add(new Rectangle(576, 544, 160, 32));
+
+// vertikal288, 32, 64
+walls.Add(new Rectangle(0, 32, 32, 256));
+walls.Add(new Rectangle(768, 32, 32, 256));
+walls.Add(new Rectangle(256, 64, 32, 64));
+walls.Add(new Rectangle(512, 64, 32, 64));
+walls.Add(new Rectangle(384, 96, 32, 96));
+walls.Add(new Rectangle(320, 128, 32, 32));
+walls.Add(new Rectangle(448, 128, 32, 32));
+walls.Add(new Rectangle(64, 160, 32, 64));
+walls.Add(new Rectangle(160, 160, 32, 32));
+walls.Add(new Rectangle(224, 160, 32, 96));
+walls.Add(new Rectangle(544, 160, 32, 96));
+walls.Add(new Rectangle(608, 160, 32, 32));
+walls.Add(new Rectangle(704, 160, 32, 64));
+walls.Add(new Rectangle(288, 256, 32, 96));
+walls.Add(new Rectangle(480, 256, 32, 96));
+walls.Add(new Rectangle(224, 288, 32, 64));
+walls.Add(new Rectangle(544, 288, 32, 64));
+walls.Add(new Rectangle(0, 320, 32, 320));
+walls.Add(new Rectangle(768, 320, 32, 320));
+walls.Add(new Rectangle(64, 384, 32, 128));
+walls.Add(new Rectangle(704, 384, 32, 128));
+walls.Add(new Rectangle(192, 416, 32, 32));
+walls.Add(new Rectangle(256, 416, 32, 64));
+walls.Add(new Rectangle(320, 416, 32, 96));
+walls.Add(new Rectangle(384, 416, 32, 128));
+walls.Add(new Rectangle(448, 416, 32, 96));
+walls.Add(new Rectangle(512, 416, 32, 64));
+walls.Add(new Rectangle(576, 416, 32, 32));
+walls.Add(new Rectangle(128, 448, 32, 32));
+walls.Add(new Rectangle(640, 448, 32, 32));
+walls.Add(new Rectangle(256, 512, 32, 96));
+walls.Add(new Rectangle(512, 512, 32, 96));
 
 
-float speed = 5;
+float speed = 2;
 int coins = 0;
 string scene = "start";
 
@@ -41,7 +99,64 @@ while (!Raylib.WindowShouldClose())
     }
     else if (scene == "room1")
     {
+        movement = Vector2.Zero;
 
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_LEFT))
+        {
+            movement.X = -1;
+        }
+        else if (Raylib.IsKeyDown(KeyboardKey.KEY_RIGHT))
+        {
+            movement.X = 1;
+        }
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_UP))
+        {
+            movement.Y = -1;
+        }
+        else if (Raylib.IsKeyDown(KeyboardKey.KEY_DOWN))
+        {
+            movement.Y = 1;
+        }
+        if (movement.Length() > 0)
+        {
+        movement = Vector2.Normalize(movement) * speed;
+        }
+   
+        charRect.x += movement.X;
+        charRect.y += movement.Y;
+
+        bool undoX = false;     //ångra
+        bool undoY = false;
+
+        // Kolla kollisioenr
+
+        if (Raylib.CheckCollisionRecs(charRect, door))
+        {
+            Console.WriteLine("YES");
+            scene = "finished";
+            // points++;
+        }
+
+        // Raylib.GetMousePosition vector circle
+
+        foreach(Rectangle wall in walls)
+        {
+            if (Raylib.CheckCollisionRecs(charRect, wall))
+                {
+                    // scene = "finished";
+                    undoX = true;
+                    undoY = true;
+                }
+        }
+        
+        if (undoX == true)
+        {
+            charRect.x -= movement.X;
+        }
+        if (undoY == true)
+        {
+            charRect.y -= movement.Y;
+        }
     }
     else if (scene == "gameOver")
     {
@@ -67,7 +182,9 @@ while (!Raylib.WindowShouldClose())
     {
         Raylib.ClearBackground(Color.BLACK);
         
-        Raylib.DrawCircleV(midPoint, 16, Color.YELLOW);
+        Raylib.DrawRectangleRec(charRect, Color.YELLOW); //player
+        Raylib.DrawRectangleRec(gate, Color.WHITE); //gate with the gosts
+        Raylib.DrawRectangleRec(door, Color.MAGENTA);
 
         foreach (Rectangle wall in walls)
         {
@@ -80,7 +197,7 @@ while (!Raylib.WindowShouldClose())
     }
     else if (scene == "finished")
     {
-        Raylib.ClearBackground(Color.BLACK);
+        Raylib.ClearBackground(Color.WHITE);
     }
     Raylib.EndDrawing();
 }
