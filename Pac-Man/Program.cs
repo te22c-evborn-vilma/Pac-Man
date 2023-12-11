@@ -16,15 +16,24 @@ Rectangle charRect = new Rectangle(10, 292, 24, 24);
 Rectangle gate = new Rectangle(352, 224, 128, 5);
 Rectangle door = new Rectangle(768, 288, 32, 32);
 
-List<Rectangle> enemies = new();
-enemies.Add(new Rectangle());
-enemies.Add(new Rectangle());
-enemies.Add(new Rectangle());
 
-List<Rectangle> coins = new(); //spawna nånstans
-coins.Add(new Rectangle());
-coins.Add(new Rectangle());
-coins.Add(new Rectangle());
+
+// ------ändra så att de har olika färg --------------------------------------------
+List<Rectangle> enemies = new();
+enemies.Add(new Rectangle(352, 256, 32, 32)); //röd fiende
+enemies.Add(new Rectangle(416, 256, 32, 32)); //turkos fiende
+enemies.Add(new Rectangle(384, 288, 32, 32)); //rosa fiende
+
+
+
+
+List<Rectangle> coins = new(); //
+coins.Add(new Rectangle(416, 32, 32, 32));
+coins.Add(new Rectangle(96, 96, 32, 32));
+coins.Add(new Rectangle(640, 160, 32, 32));
+coins.Add(new Rectangle(32, 544, 32, 32));
+coins.Add(new Rectangle(320, 512, 32, 32));
+coins.Add(new Rectangle(608, 416, 32, 32));
 
 // Vector2 midPoint = new Vector2(20, 320);
 // Texture2D characterIMG = Raylib.LoadTexture("pic.png");
@@ -94,9 +103,30 @@ walls.Add(new Rectangle(256, 512, 32, 96));
 walls.Add(new Rectangle(512, 512, 32, 96));
 
 
-float speed = 2;
-int points = 0;
+float speed = 3;
 string scene = "start";
+
+static void PlaceCoins()
+{
+    int i = 0;
+
+    while (i < 10)
+    {
+        //placera coins på flera ställen
+        i++;
+    }
+}
+static void CatchCoins()
+{
+    // om spelaren rör ett mynt:
+    //      + 1 poäng
+    //      myntet försvinner/eller byter plats (ny metod?)
+    // if (Raylib.CheckCollisionRecs(charRect, coin))
+    // {
+
+    // }
+}
+
 
 while (!Raylib.WindowShouldClose())
 {
@@ -167,6 +197,9 @@ while (!Raylib.WindowShouldClose())
         {
             charRect.y -= movement.Y;
         }
+
+        PlaceCoins();
+
     }
     else if (scene == "gameOver")
     {
@@ -185,6 +218,7 @@ while (!Raylib.WindowShouldClose())
     if (scene == "start")
     {
         Raylib.ClearBackground(Color.BLACK);
+        Raylib.DrawText("press space to start", 280, 305, 32, Color.BLUE);
         Raylib.DrawText("press space to start", 275, 300, 32, Color.WHITE);
 
     }
@@ -193,21 +227,33 @@ while (!Raylib.WindowShouldClose())
         Raylib.ClearBackground(Color.BLACK);
         
         Raylib.DrawRectangleRec(charRect, Color.YELLOW); //player
-        Raylib.DrawRectangleRec(gate, Color.WHITE); //gate with the gosts
-        Raylib.DrawRectangleRec(door, Color.MAGENTA);
+        Raylib.DrawRectangleRec(gate, Color.WHITE); //gate with the enemies
+        Raylib.DrawRectangleRec(door, Color.MAGENTA); //door that leads to the next level
 
         foreach (Rectangle wall in walls)
         {
             Raylib.DrawRectangleRec(wall, Color.DARKBLUE);
         }
+        foreach (Rectangle coin in coins)
+        {
+            Raylib.DrawRectangleRec(coin, Color.GOLD);
+        }
+        foreach (Rectangle enemy in enemies)
+        {
+            Raylib.DrawRectangleRec(enemy, Color.RED);
+        }
     }
     else if (scene == "gameOver")
     {
-        Raylib.ClearBackground(Color.GOLD);
+        Raylib.ClearBackground(Color.RED);
+
+        Raylib.DrawText("you lost", 275, 300, 32, Color.WHITE);
     }
     else if (scene == "finished")
     {
         Raylib.ClearBackground(Color.WHITE);
+
+        Raylib.DrawText("congratulations!\nyou finished", 275, 300, 32, Color.BLACK);
     }
     Raylib.EndDrawing();
 }
