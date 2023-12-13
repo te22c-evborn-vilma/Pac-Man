@@ -7,7 +7,7 @@ Console.OutputEncoding = System.Text.Encoding.UTF8;
 
 Random generator = new Random();
 
-Raylib.InitWindow(800, 640, "Pac-Man");
+Raylib.InitWindow(800, 700, "Pac-Man");
 Raylib.SetTargetFPS(60);
 
 Vector2 movement = new Vector2(0, 0);
@@ -15,17 +15,15 @@ Vector2 movement = new Vector2(0, 0);
 Rectangle charRect = new Rectangle(10, 292, 24, 24);
 Rectangle gate = new Rectangle(352, 224, 128, 5);
 Rectangle door = new Rectangle(768, 288, 32, 32);
+Rectangle gO = new Rectangle(0, 200, 800, 32);
 
-
+// Rectangle coin = new Rectangle(416, 32, 32, 32);
 
 // ------ändra så att de har olika färg --------------------------------------------
 List<Rectangle> enemies = new();
 enemies.Add(new Rectangle(352, 256, 32, 32)); //röd fiende
 enemies.Add(new Rectangle(416, 256, 32, 32)); //turkos fiende
 enemies.Add(new Rectangle(384, 288, 32, 32)); //rosa fiende
-
-
-
 
 List<Rectangle> coins = new(); //
 coins.Add(new Rectangle(416, 32, 32, 32));
@@ -102,22 +100,19 @@ walls.Add(new Rectangle(640, 448, 32, 32));
 walls.Add(new Rectangle(256, 512, 32, 96));
 walls.Add(new Rectangle(512, 512, 32, 96));
 
-
 float speed = 3;
 string scene = "start";
+int points = 0;
+
 
 static void PlaceCoins()
 {
-    int i = 0;
-
-    while (i < 10)
-    {
-        //placera coins på flera ställen
-        i++;
-    }
+    CatchCoins();
 }
-static void CatchCoins()
+
+ static void CatchCoins()
 {
+    
     // om spelaren rör ett mynt:
     //      + 1 poäng
     //      myntet försvinner/eller byter plats (ny metod?)
@@ -125,7 +120,7 @@ static void CatchCoins()
     // {
 
     // }
-}
+}       
 
 
 while (!Raylib.WindowShouldClose())
@@ -174,20 +169,20 @@ while (!Raylib.WindowShouldClose())
         {
             Console.WriteLine("YES");
             scene = "finished";
-            // points++;
+            points += 50;
         }
 
         // Raylib.GetMousePosition vector circle
 
-        foreach(Rectangle wall in walls)
-        {
-            if (Raylib.CheckCollisionRecs(charRect, wall))
-                {
-                    // scene = "finished";
-                    undoX = true;
-                    undoY = true;
-                }
-        }
+        // foreach(Rectangle wall in walls)
+        // {
+        //     if (Raylib.CheckCollisionRecs(charRect, wall) || Raylib.CheckCollisionRecs(charRect, gate))
+        //         {
+        //             // scene = "finished";
+        //             undoX = true;
+        //             undoY = true;
+        //         }
+        // }
         
         if (undoX == true)
         {
@@ -197,13 +192,27 @@ while (!Raylib.WindowShouldClose())
         {
             charRect.y -= movement.Y;
         }
-
-        PlaceCoins();
+        
+        foreach(Rectangle coin in coins)
+        {
+            if (Raylib.CheckCollisionRecs(charRect, coin))
+            {
+                points++;
+                // ta bort myntet/byt plats (random)
+            }
+        }
+        foreach(Rectangle enemy in enemies)
+        {
+            if (Raylib.CheckCollisionRecs(charRect, enemy))
+            {
+                scene = "gameOver";
+            }
+        }
 
     }
     else if (scene == "gameOver")
     {
-
+        
     }
     else if (scene == "finished")
     {
@@ -226,9 +235,12 @@ while (!Raylib.WindowShouldClose())
     {
         Raylib.ClearBackground(Color.BLACK);
         
+        Raylib.DrawText($"points: {points}", 50, 654, 32, Color.WHITE);
+
         Raylib.DrawRectangleRec(charRect, Color.YELLOW); //player
         Raylib.DrawRectangleRec(gate, Color.WHITE); //gate with the enemies
         Raylib.DrawRectangleRec(door, Color.MAGENTA); //door that leads to the next level
+        
 
         foreach (Rectangle wall in walls)
         {
@@ -248,6 +260,7 @@ while (!Raylib.WindowShouldClose())
         Raylib.ClearBackground(Color.RED);
 
         Raylib.DrawText("you lost", 275, 300, 32, Color.WHITE);
+        Raylib.DrawRectangleRec(gO, Color.BLACK);
     }
     else if (scene == "finished")
     {
