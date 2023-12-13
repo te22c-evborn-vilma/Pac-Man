@@ -105,13 +105,13 @@ string scene = "start";
 int points = 0;
 
 
-static void PlaceCoins()
-{
-    CatchCoins();
-}
+// static void PlaceCoins()
+// {
+//     CatchCoins();
+// }
 
- static void CatchCoins()
-{
+//  static void CatchCoins()
+// {
     
     // om spelaren rör ett mynt:
     //      + 1 poäng
@@ -120,7 +120,7 @@ static void PlaceCoins()
     // {
 
     // }
-}       
+// }       
 
 
 while (!Raylib.WindowShouldClose())
@@ -212,7 +212,7 @@ while (!Raylib.WindowShouldClose())
     }
     else if (scene == "gameOver")
     {
-        
+
     }
     else if (scene == "finished")
     {
