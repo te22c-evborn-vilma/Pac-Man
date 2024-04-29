@@ -151,8 +151,7 @@ while (!Raylib.WindowShouldClose())
         }
     }
     
-    // "rum 1" - ser till spelaren kan röra sig i labyrinten och bestämmer vad som händer 
-    // när spelaren kolliderar med olika objekt i spelet
+    // "rum 1" - ser till spelaren kan röra sig i labyrinten och bestämmer vad som händer när spelaren kolliderar med olika objekt i spelet
     else if (scene == "room1")
     {
         movement = Vector2.Zero;
@@ -223,9 +222,10 @@ while (!Raylib.WindowShouldClose())
             if (Raylib.CheckCollisionRecs(charRect, coin))
             {
                 points++;
-                // ta bort myntet/byt plats (random)
+                // ta bort myntet/byt plats (random) - se till att man bara får ett poäng
             }
         }
+        // Enemies rör på sig, antingen random eller fram och tillbaka
         // foreach(Rectangle enemy in enemies)
         // {
         //     if (Raylib.CheckCollisionRecs(charRect, enemy))
@@ -255,7 +255,6 @@ while (!Raylib.WindowShouldClose())
         Raylib.ClearBackground(Color.BLACK);
         Raylib.DrawText("press space to start", 280, 305, 32, Color.BLUE);
         Raylib.DrawText("press space to start", 275, 300, 32, Color.WHITE);
-
     }
 
     // info-scenen ger instruktioner till spelaren
