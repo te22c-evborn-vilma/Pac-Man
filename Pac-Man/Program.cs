@@ -216,7 +216,6 @@ while (!Raylib.WindowShouldClose())
             charRect.y -= movement.Y;
         }
         
-        
         foreach(Rectangle coin in coins)
         {
             if (Raylib.CheckCollisionRecs(charRect, coin))
